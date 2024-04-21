@@ -11,6 +11,19 @@ fastapi = "^0.110.2"
 uvicorn = "^0.29.0"
 sqlalchemy = "^2.0.29"
 pydantic = "^2.7.0"
+taskipy = "^1.12.2"
+
+[tool.taskipy.tasks]
+format = """
+isort .
+black .
+"""
+kill = "kill -9 $(lsof -t -i :8000)"
+test = "pytest -v"
+run = """
+uvicorn API.main:app --reload
+"""
+doc = "mkdocs serve"
 
 
 [build-system]
