@@ -12,6 +12,9 @@ uvicorn = "^0.29.0"
 sqlalchemy = "^2.0.29"
 pydantic = "^2.7.0"
 taskipy = "^1.12.2"
+docker = "^7.0.0"
+alembic = "^1.13.1"
+asyncpg = "^0.29.0"
 
 [tool.taskipy.tasks]
 format = """
