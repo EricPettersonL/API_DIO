@@ -26,6 +26,8 @@ test = "pytest -v"
 run = """
 uvicorn API.main:app --reload
 """
+create-migretion = "alembic revision --autogenerate"
+run-db = "alembic upgrade head"
 doc = "mkdocs serve"
 
 
