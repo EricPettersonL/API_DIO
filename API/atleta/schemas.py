@@ -10,3 +10,4 @@ class Atleta(SchemaBase):
     peso: Annotated[PositiveFloat, Field(description="Peso do atleta", example=[70.5, 80.0], gt=0)]
     altura: Annotated[PositiveFloat, Field(description="Altura do atleta", example=[1.70, 1.80], gt=0)]
     sexo: Annotated[str, Field(description="Sexo do atleta", example=["Masculino", "Feminino"], min_length=10, max_length=10)]
+    
