@@ -29,6 +29,7 @@ uvicorn API.main:app --reload
 """
 create-migretion = "alembic revision --autogenerate"
 run-db = "alembic upgrade head"
+docker = "docker compose up -d"
 doc = "mkdocs serve"
 
 
