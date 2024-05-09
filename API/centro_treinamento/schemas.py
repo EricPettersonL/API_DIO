@@ -8,7 +8,7 @@ class CentroTreinamento(SchemaBase):
     proprietario: Annotated[str, Field(description="Proprietario do centro de treinamento ", example="Marcos", min_length=1, max_length=30)]
     
 class CentroTreinamentoAtleta(SchemaBase):
-    nome: Annotated[str, Field(description="Nome do centro de treinamento ", example="CT King 2", min_length=1, max_length=20)]
+    nome: Annotated[str, Field(description="Nome do centro de treinamento ", example="CT King", min_length=1, max_length=20)]
     
 class CentroTreinamentoOut(CentroTreinamento):
     id: Annotated[UUID4, Field(description="ID do centro de treinamento")]
