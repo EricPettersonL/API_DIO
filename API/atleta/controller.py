@@ -1,6 +1,8 @@
 from datetime import datetime
+from typing import Optional
 from uuid import uuid4
 from fastapi import APIRouter, Body, HTTPException, status
+from fastapi_pagination import Page, Params, paginate
 from pydantic import UUID4
 from sqlalchemy import select
 from API.atleta.models import AtletaModel
@@ -8,6 +10,9 @@ from API.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate
 from API.categoria.models import CategoriaModel
 from API.centro_treinamento.models import CentroTreinamentoModel
 from API.contrib.dependencies import DatabaseDependency
+
+from fastapi import Query
+
 
 router = APIRouter()
 
@@ -37,11 +42,57 @@ async def post_atleta(db_session: DatabaseDependency, atleta_in: AtletaIn = Body
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Erro ao inserir atleta: {e}")
     
-@router.get(path="/", summary="Retorna todos os atletas", response_model=list[AtletaOut], status_code=status.HTTP_200_OK)
-async def query(db_session: DatabaseDependency) -> list[AtletaOut]:
-    atletas: list[AtletaModel] = (await db_session.execute(select(AtletaModel))).scalars().all()
+
+
+
+@router.get("/", summary="Retorna todos os atletas", response_model=Page[AtletaOut], status_code=status.HTTP_200_OK)
+async def query(
+    db_session: DatabaseDependency,
+    limit: int = Query(..., gt=0),
+    offset: int = Query(..., ge=0),
+    nome: Optional[str] = None,
+    cpf: Optional[str] = None,
+) -> Page[AtletaOut]:
+    query = select(AtletaModel)
+
+    if nome:
+        query = query.where(AtletaModel.nome == nome)
+    if cpf:
+        query = query.where(AtletaModel.cpf == cpf)
+
+    atletas = (await db_session.execute(query)).scalars().all()
     
-    return [AtletaOut.model_validate(atleta) for atleta in atletas]
+     # Mapear os objetos AtletaModel para dicionários
+    atletas_dicts = [
+        {
+            'id': atleta.id,
+            'created_at': atleta.created_at,
+            'nome': atleta.nome,
+            'categoria': atleta.categoria,
+            'centro_treinamento': atleta.centro_treinamento,
+            'idade': atleta.idade,
+            'cpf': atleta.cpf,
+            'peso': atleta.peso,
+            'altura': atleta.altura,
+            'sexo': atleta.sexo,
+
+        } 
+        for atleta in atletas
+    ]
+
+    # Criar instâncias de AtletaOut a partir dos dicionários mapeados
+    atletas_out = [
+        AtletaOut(**atleta_dict) 
+        for atleta_dict in atletas_dicts
+    ]
+    
+    paginated_atletas = paginate(atletas_out, Params(limit=limit, offset=offset))
+    
+    return paginated_atletas
+
+
+
+
 
 @router.get(path="/{id}", summary="Retorna um atleta pelo ID", response_model=AtletaOut, status_code=status.HTTP_200_OK)
 async def query_by_id(db_session: DatabaseDependency, id: UUID4) -> AtletaOut:
