@@ -16,6 +16,14 @@ class Atleta(SchemaBase):
     centro_treinamento: Annotated[CentroTreinamentoAtleta, Field(description="Centro de treinamento do atleta")]
 
 
+class AtletaTeste(SchemaBase):
+    nome: Annotated[str, Field(description="Nome do atleta")]
+    categoria: Annotated[Categoria, Field(description="Categoria do atleta")]
+    centro_treinamento: Annotated[CentroTreinamentoAtleta, Field(description="Centro de treinamento do atleta")]
+    
+class AtletaOutTeste(AtletaTeste, OutSchema):
+    pass
+    
 class AtletaIn(Atleta):
     pass    
 class AtletaOut(Atleta, OutSchema):
@@ -24,3 +32,4 @@ class AtletaOut(Atleta, OutSchema):
 class AtletaUpdate(SchemaBase):
     nome: Annotated[Optional[str], Field(None,description="Nome do atleta", example="Maria", min_length=3, max_length=50)]
     idade: Annotated[Optional[int], Field(None,description="Idade do atleta", example= 21)]
+    

@@ -5,8 +5,9 @@ from fastapi import APIRouter, Body, HTTPException, status
 from fastapi_pagination import Page, Params, paginate
 from pydantic import UUID4
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from API.atleta.models import AtletaModel
-from API.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate
+from API.atleta.schemas import AtletaIn, AtletaOut, AtletaOutTeste, AtletaUpdate
 from API.categoria.models import CategoriaModel
 from API.centro_treinamento.models import CentroTreinamentoModel
 from API.contrib.dependencies import DatabaseDependency
@@ -39,20 +40,19 @@ async def post_atleta(db_session: DatabaseDependency, atleta_in: AtletaIn = Body
         atleta_model.centro_treinamento_id = centro_treinamento.pk_id
         db_session.add(atleta_model)
         await db_session.commit()
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Erro ao inserir atleta: {e}")
-    
+    except IntegrityError:
+        raise HTTPException(status_code=status.HTTP_303_SEE_OTHER, detail=f"O Atleta com o  CPF {atleta_in.cpf} já foi inserido")
 
 
 
-@router.get("/", summary="Retorna todos os atletas", response_model=Page[AtletaOut], status_code=status.HTTP_200_OK)
+@router.get("/", summary="Retorna todos os atletas", response_model=Page[AtletaOutTeste], status_code=status.HTTP_200_OK)
 async def query(
     db_session: DatabaseDependency,
     limit: int = Query(..., gt=0),
     offset: int = Query(..., ge=0),
     nome: Optional[str] = None,
     cpf: Optional[str] = None,
-) -> Page[AtletaOut]:
+) -> Page[AtletaOutTeste]:
     query = select(AtletaModel)
 
     if nome:
@@ -62,7 +62,7 @@ async def query(
 
     atletas = (await db_session.execute(query)).scalars().all()
     
-     # Mapear os objetos AtletaModel para dicionários
+
     atletas_dicts = [
         {
             'id': atleta.id,
@@ -70,19 +70,14 @@ async def query(
             'nome': atleta.nome,
             'categoria': atleta.categoria,
             'centro_treinamento': atleta.centro_treinamento,
-            'idade': atleta.idade,
-            'cpf': atleta.cpf,
-            'peso': atleta.peso,
-            'altura': atleta.altura,
-            'sexo': atleta.sexo,
 
         } 
         for atleta in atletas
     ]
 
-    # Criar instâncias de AtletaOut a partir dos dicionários mapeados
+    
     atletas_out = [
-        AtletaOut(**atleta_dict) 
+        AtletaOutTeste(**atleta_dict) 
         for atleta_dict in atletas_dicts
     ]
     
