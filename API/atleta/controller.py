@@ -3,7 +3,8 @@ from typing import Optional
 from uuid import uuid4
 
 from fastapi import APIRouter, Body, HTTPException, Query, status
-from fastapi_pagination import Page, Params, paginate
+from fastapi_pagination import Page, Params
+from fastapi_pagination.ext.sqlalchemy import paginate
 from pydantic import UUID4
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError

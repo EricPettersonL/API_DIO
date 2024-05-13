@@ -16,3 +16,35 @@ Código assíncrono apenas significa que a linguagem tem um jeito de dizer para 
 ## Modelagem de entidade e relacionamento - MER
 ![Modelagem de entidade e relacionamento - MER](mer.jpg)
 
+## Executando a API
+Para esse projeto eu usei basicamente o poetry.
+
+Para instalar o poetry na sua maquina:
+```bash
+pipx install poetry
+``` 
+Clonar esse repositorio:
+```bash
+git clone https://github.com/EricPettersonL/API_DIO.git
+```
+
+
+Para iniciar o projeto:
+```bash
+poetry install
+```
+Entrar no ambiente virtual:
+```bash
+poetry shell
+```
+Subir o banco de dados, instalar o [docker-compose](https://docs.docker.com/compose/install/linux/), depois execute:
+```bash
+task docker
+```
+Para subir a API:
+
+```bash
+task run
+```
+e acesse: http://127.0.0.1:8000/docs
+
