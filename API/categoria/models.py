@@ -1,7 +1,9 @@
-from API.atleta.models import AtletaModel
-from API.contrib.models_base import BaseModel
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from API.atleta.models import AtletaModel
+from API.contrib.models_base import BaseModel
+
 
 class CategoriaModel(BaseModel):
     __tablename__ = "categorias"

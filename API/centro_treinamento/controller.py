@@ -1,11 +1,13 @@
 from uuid import uuid4
-from fastapi import APIRouter, HTTPException, status, Body
+
+from fastapi import APIRouter, Body, HTTPException, status
 from pydantic import UUID4
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from API.centro_treinamento.models import CentroTreinamentoModel
-from API.centro_treinamento.schemas import CentroTreinamento, CentroTreinamentoOut
+from API.centro_treinamento.schemas import (CentroTreinamento,
+                                            CentroTreinamentoOut)
 from API.contrib.dependencies import DatabaseDependency
 
 router = APIRouter()

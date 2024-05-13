@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from API.routers import api_router
 
 app = FastAPI(title="WorkoutAPI")

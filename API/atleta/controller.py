@@ -1,19 +1,19 @@
 from datetime import datetime
 from typing import Optional
 from uuid import uuid4
-from fastapi import APIRouter, Body, HTTPException, status
+
+from fastapi import APIRouter, Body, HTTPException, Query, status
 from fastapi_pagination import Page, Params, paginate
 from pydantic import UUID4
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
+
 from API.atleta.models import AtletaModel
-from API.atleta.schemas import AtletaIn, AtletaOut, AtletaOutTeste, AtletaUpdate
+from API.atleta.schemas import (AtletaIn, AtletaOut, AtletaOutTeste,
+                                AtletaUpdate)
 from API.categoria.models import CategoriaModel
 from API.centro_treinamento.models import CentroTreinamentoModel
 from API.contrib.dependencies import DatabaseDependency
-
-from fastapi import Query
-
 
 router = APIRouter()
 

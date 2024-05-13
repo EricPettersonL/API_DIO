@@ -1,6 +1,8 @@
-from typing import Annotated
 from datetime import datetime
+from typing import Annotated
+
 from pydantic import UUID4, BaseModel, Field
+
 
 class SchemaBase(BaseModel):
     class Config:

@@ -1,6 +1,9 @@
 from typing import Annotated
+
 from pydantic import UUID4, Field
+
 from API.contrib.schema_base import SchemaBase
+
 
 class CentroTreinamento(SchemaBase):
     nome: Annotated[str, Field(description="Nome do centro de treinamento ", example="CT King", min_length=1, max_length=20)]

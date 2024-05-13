@@ -1,8 +1,10 @@
 from uuid import uuid4
+
 from fastapi import APIRouter, Body, HTTPException, status
 from pydantic import UUID4
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
+
 from API.categoria.models import CategoriaModel
 from API.categoria.schemas import Categoria, CategoriaOut
 from API.contrib.dependencies import DatabaseDependency
